@@ -202,6 +202,9 @@ workflows:
       - python-check:
           name: Python 3.8
           version: "3.8"
+      - python-check:
+          name: Python 3.9
+          version: "3.9"
 
   macos-check:
     jobs:
@@ -214,6 +217,9 @@ workflows:
       - python-macos-check:
           name: MacOS Python 3.8
           python-version: "3.8"
+      - python-macos-check:
+          name: MacOS Python 3.9
+          python-version: "3.9"
 
   linux-deploy:
     jobs:
