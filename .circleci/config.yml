@@ -114,6 +114,14 @@ commands:
           name: Upload to pypi
           command: |
             python3 -m pip install twine
+            python3 -m twine upload -u __token__ --skip-existing dist/*
+
+  upload-pypi:
+    steps:
+      - run:
+          name: Upload to test.pypi
+          command: |
+            python3 -m pip install twine
             python3 -m twine upload -u __token__ -r testpypi --skip-existing dist/*
 
 jobs:
@@ -188,6 +196,17 @@ jobs:
       - create-wheel
       - upload-pypi
 
+  wheels-macos-deploy:
+    macos:
+      xcode: 11.0.0
+    environment:
+      - CIBW_BUILD: "cp36-macosx_x86_64 cp37-macosx_x86_64 cp38-macosx_x86_64 cp39-macosx_x86_64"
+      - CIBW_BEFORE_BUILD: "pip3 install cmake setuptools-scm -r requirements.txt && pip3 install -r requirements-dev.txt"
+    steps:
+      - checkout
+      - create-wheel
+      - upload-testpypi
+
 workflows:
   version: 2
 
@@ -247,7 +266,16 @@ workflows:
           filters:
             tags:
               only: /[0-9]+(\.[0-9]+)*/
+            branches:
+              ignore: /.*/
 
+    macos-test-deploy:
+      jobs:
+        - wheels-macos-test-deploy:
+            name: Create and deploy macos wheels
+            filters:
+              tags:
+                only: /.*{test|Test|TEST}.*[0-9]+(\.[0-9]+)*/
 
   optional:
     jobs:
