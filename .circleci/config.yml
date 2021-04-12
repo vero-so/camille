@@ -114,7 +114,7 @@ commands:
           name: Upload to pypi
           command: |
             python3 -m pip install twine
-            python3 -m twine upload -u __token__ --skip-existing dist/*
+            python3 -m twine upload -u __token__ -r testpypi --skip-existing dist/*
 
 jobs:
   python-check:
@@ -247,8 +247,7 @@ workflows:
           filters:
             tags:
               only: /[0-9]+(\.[0-9]+)*/
-            branches:
-              ignore: /.*/
+
 
   optional:
     jobs:
