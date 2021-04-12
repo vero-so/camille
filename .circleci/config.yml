@@ -116,7 +116,7 @@ commands:
             python3 -m pip install twine
             python3 -m twine upload -u __token__ --skip-existing dist/*
 
-  upload-pypi:
+  upload-testpypi:
     steps:
       - run:
           name: Upload to test.pypi
@@ -196,7 +196,7 @@ jobs:
       - create-wheel
       - upload-pypi
 
-  wheels-macos-deploy:
+  wheels-macos-test-deploy:
     macos:
       xcode: 11.0.0
     environment:
@@ -269,13 +269,13 @@ workflows:
             branches:
               ignore: /.*/
 
-    macos-test-deploy:
-      jobs:
-        - wheels-macos-test-deploy:
-            name: Create and deploy macos wheels
-            filters:
-              tags:
-                only: /.*{test|Test|TEST}.*[0-9]+(\.[0-9]+)*/
+  macos-test-deploy:
+    jobs:
+      - wheels-macos-test-deploy:
+          name: Create and deploy macos wheels
+          filters:
+            tags:
+              only: /.*{test|Test|TEST}.*[0-9]+(\.[0-9]+)*/
 
   optional:
     jobs:
