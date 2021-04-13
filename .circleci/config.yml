@@ -122,7 +122,11 @@ commands:
           name: Upload to test.pypi
           command: |
             python3 -m pip install twine
+<<<<<<< HEAD
             python3 -m twine upload -u __token__ -p ${PYPI_TOKEN} --verbose --repository-url https://test.pypi.org/legacy/ --skip-existing dist/*
+=======
+            python3 -m twine upload -u __token__ -p PYPI_TOKEN --repository-url https://test.pypi.org/legacy/ --skip-existing dist/*
+>>>>>>> 8a963b7339fb13cddac287d932c0b8fcc6c5ec37
 
 jobs:
   python-check:
