@@ -276,7 +276,7 @@ workflows:
           name: Create and deploy macos wheels
           filters:
             tags:
-              only: /(beta)|(Beta)|(BETA)[0-9]+(\.[0-9]+)*/
+              only: /(.)*[0-9]+(\.[0-9]+)*(-beta)/
             branches:
               ignore: /.*/
 
