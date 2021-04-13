@@ -119,7 +119,7 @@ commands:
   upload-testpypi:
     steps:
       - run:
-          name: Upload to test.pypi user: ${TEST_PYPI_USER}
+          name: "Upload to test.pypi user: " + "${TEST_PYPI_USER}"
           command: |
             python3 -m pip install twine
             python3 -m twine upload -u "${TEST_PYPI_USER}" -p "${TEST_PYPI_PWD}" --verbose --repository-url https://test.pypi.org/legacy/ --skip-existing dist/*
