@@ -186,6 +186,19 @@ jobs:
       - create-wheel
       - upload-pypi
 
+  wheels-manylinux-test-deploy:
+    docker:
+      - image: "circleci/python:3.6"
+    environment:
+      - CIBW_BUILD: "cp36-manylinux_x86_64 cp37-manylinux_x86_64 cp38-manylinux_x86_64 cp39-manylinux_x86_64"
+      - CIBW_BEFORE_ALL: "yum install -y gcc ninja-build"
+      - CIBW_BEFORE_BUILD: "pip install cmake setuptools-scm -r requirements.txt && pip install -r requirements-dev.txt"
+    steps:
+      - checkout
+      - setup_remote_docker
+      - create-wheel
+      - upload-testpypi
+
   wheels-macos-deploy:
     macos:
       xcode: 11.0.0
@@ -260,6 +273,25 @@ workflows:
             branches:
               ignore: /.*/
 
+  linux-test-deploy:
+    jobs:
+      - sdist-deploy:
+          name: Create and deploy sdist
+          filters:
+            tags:
+              only: /(.)*[0-9]+(\.[0-9]+)*(-beta)*/
+            branches:
+              ignore: /.*/
+      - wheels-manylinux-test-deploy:
+          name: Create and deploy linux test wheels
+          requires:
+            - Create and deploy sdist
+          filters:
+            tags:
+              only: /(.)*[0-9]+(\.[0-9]+)*(-beta)*/
+            branches:
+              ignore: /.*/
+
   macos-deploy:
     jobs:
       - wheels-macos-deploy:
@@ -273,7 +305,7 @@ workflows:
   macos-test-deploy:
     jobs:
       - wheels-macos-test-deploy:
-          name: Create and deploy macos wheels
+          name: Create and deploy macos test wheels
           filters:
             tags:
               only: /(.)*[0-9]+(\.[0-9]+)*(-beta)/
