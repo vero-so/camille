@@ -105,7 +105,6 @@ commands:
       - run:
           name: Create wheel
           command: |
-            cat /etc/yum.repos.d/CentOS-Base.repo
             python3 -m pip install cibuildwheel==1.6.0
             python3 -m cibuildwheel --output-dir dist
 
